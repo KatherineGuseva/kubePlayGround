@@ -1,0 +1,12 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: go-merge
+spec:
+  template:
+    spec:
+      containers:
+      - name: go-merge
+        image: merge
+      restartPolicy: Never
+  backoffLimit: 4

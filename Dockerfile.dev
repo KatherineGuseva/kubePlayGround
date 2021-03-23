@@ -1,0 +1,17 @@
+FROM golang:1.15 as build
+WORKDIR /app
+COPY . .
+WORKDIR /app/merge
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o go-merge main.go
+
+
+FROM registry.access.redhat.com/ubi8/ubi-minimal
+ARG GOGSOURCE
+ARG CONFIGSOURCE
+ARG COGDEST
+
+USER root
+
+COPY --from=build /app/merge/go-merge .
+
+ENTRYPOINT ["sh", "-c", "./go-merge"]
